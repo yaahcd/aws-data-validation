@@ -9,7 +9,9 @@
   "main": "index.js",
   "devDependencies": {},
   "scripts": {
-    "invoke-local": "IS_OFFLINE=true sls invoke local -f hero-insert --path mocks/heroes.insert.json"
+    "invoke-local": "IS_OFFLINE=true sls invoke local -f hero-insert --path mocks/heroes.insert.json",
+    "invoke": "sls invoke -f hero-insert --path mocks/heroes.insert.json",
+    "log-trigger": "sls logs -f hero-trigger"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,6 @@
 const { dynamoDB } = require("./factory");
-const Handler = require('./handler')
+const { decoratorValidator } = require("./util");
+const Handler = require('./handler');
 
 const handler = new Handler({
   dynamoDBSvc: dynamoDB
@@ -20,6 +21,8 @@ module.exports.heroesTrigger = async (event) => {
   };
 }; 
 
-module.exports.heroesInsert = async (event) => {
-  return handler.main(event)
-};
+module.exports.heroesInsert = decoratorValidator(
+  handler.main.bind(handler), // .bind para garantir que a variável this seja o conteúdo do handler
+  handler.validator(),
+  'body'
+)

@@ -7,7 +7,7 @@ class Handler {
     this.dynamoTable = "Heroes";
   }
 
-  static validator() {
+  validator() {
     return Joi.object({
       name: Joi.string().max(100).min(2).required(),
       power: Joi.string().max(50).min(2).required(),
@@ -15,12 +15,9 @@ class Handler {
   }
 
   async main(event) {
-    const data = JSON.parse(event.body);
-    const { error, value } = await Handler.validator().validate(data, {
-      abortEarly: true,
-    });
+    const data = event.body
 
-    const params = this.preparedData(value);
+    const params = this.preparedData(data);
     await this.dynamoDBSvc.put(params).promise();
 
     const insertedItem = await this.dynamoDBSvc
