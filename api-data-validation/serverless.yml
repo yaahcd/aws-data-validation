@@ -11,7 +11,7 @@ functions:
     handler: src/index.heroesInsert
     events:
       - http:
-        path: heroes
-        method: post
-        cors: true
+          path: heroes
+          method: post
+          cors: true
 

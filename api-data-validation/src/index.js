@@ -1,5 +1,9 @@
 const { dynamoDB } = require("./factory");
-const { randomUUID } = require("node:crypto");
+const Handler = require('./handler')
+
+const handler = new Handler({
+  dynamoDBSvc: dynamoDB
+})
 
 module.exports.heroesTrigger = async (event) => {
   console.log("event", event);
@@ -14,34 +18,8 @@ module.exports.heroesTrigger = async (event) => {
       2
     ),
   };
-};
+}; 
 
 module.exports.heroesInsert = async (event) => {
-
-  const data = JSON.parse(event.body);
-  const params = {
-    TableName: "Heroes",
-    Item: {
-      id: randomUUID(),
-      ...data,
-      createdAt: new Date().toISOString(),
-    },
-  };
-
-  await dynamoDB.put(params).promise();
-
-  const insertedItem = await dynamoDB
-    .query({
-      TableName: "Heroes",
-      ExpressionAttributeValues: {
-        ":id": params.Item.id,
-      },
-      KeyConditionExpression: "id = :id",
-    })
-    .promise();
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify(insertedItem),
-  };
+  return handler.main(event)
 };
